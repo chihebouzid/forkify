@@ -2,8 +2,8 @@ import { element } from './base'
 
 export const renderList = item => {
     const markup = `
-    <li class="shopping__item">
-        <div class="shopping__count" data-id= ${item.id}>
+    <li class="shopping__item" data-itemid=${item.id}>
+        <div class="shopping__count" >
          <input type="number" value="${item.count}" step="${item.count}">
             <p>${item.unit}</p>
         </div>
@@ -15,10 +15,11 @@ export const renderList = item => {
         </button>
     </li>
     `
-    element.shoppingList.insertAdjacentHTML('afterbegin', markup);
+    element.shoppingList.insertAdjacentHTML('beforeend', markup);
 };
 
 export const deleteItem = id => {
-    const item = document.querySelector(`[data-id="${id}"]`);
-    item.parentElement.removeChild(item);
+    const item = document.querySelector(`[data-itemid="${id}"]`);
+    console.log(item);
+    if (item) item.parentElement.removeChild(item);
 };
