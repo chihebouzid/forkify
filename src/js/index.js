@@ -1,10 +1,13 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import List from './models/List';
+import Likes from './models/Likes';
 import { element, renderLoader, clearLoader } from './views/base';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
+import * as likeView from './views/likeView';
+
 
 
 
@@ -90,7 +93,7 @@ const controlRecipe = async () => {
 
             //render recipe 
             clearLoader();
-            recipeView.renderRecipe(state.recipe);
+            recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
 
 
         } catch (error) {
@@ -140,6 +143,39 @@ element.shoppingList.addEventListener('click', e => {
 
 
 
+
+
+//********** Like controller **************//
+const controlLike = () => {
+    if (!state.likes) state.likes = new Likes();
+    const currentId = state.recipe.id;
+
+    if (!state.likes.isLiked(currentId)) {
+        //add like to the state
+        const newLike = state.likes.addLike(currentId, state.recipe.title, state.recipe.author, state.recipe.img);
+        //toggle the like button
+        likeView.toggleLikeBtn(true);
+        //add like to UI list
+        console.log(state.likes);
+    } else {
+        //remove like from the state 
+        state.likes.deleteLike(currentId);
+
+        //toggle the like button 
+        likeView.toggleLikeBtn(false);
+        //remove like from ui list 
+        console.log(state.likes);
+    }
+
+
+}
+
+
+
+
+
+
+
 ['hashchange', 'load'].forEach(event => { window.addEventListener(event, controlRecipe) });
 
 //handeling recipe btn clicks 
@@ -155,9 +191,12 @@ element.recipePage.addEventListener('click', e => {
         //increase servings 
         state.recipe.updateServings('inc');
         recipeView.updateServingsIngredients(state.recipe);
+        //add ingredients to shopping list 
     } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
         controlList();
-
+        //handle the likes
+    } else if (e.target.matches('.recipe__love, .recipe__love *')) {
+        controlLike();
     }
 
 })
