@@ -146,6 +146,11 @@ element.shoppingList.addEventListener('click', e => {
 
 
 //********** Like controller **************//
+
+//TESTING 
+state.likes = new Likes();
+likeView.toggleLikeMenu(state.likes.getNumLikes());
+
 const controlLike = () => {
     if (!state.likes) state.likes = new Likes();
     const currentId = state.recipe.id;
@@ -166,6 +171,7 @@ const controlLike = () => {
         //remove like from ui list 
         console.log(state.likes);
     }
+    likeView.toggleLikeMenu(state.likes.getNumLikes());
 
 
 }
